@@ -1,0 +1,3195 @@
+html, body {
+    margin: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+}
+
+#app {
+    height: 100vh;
+    display: flex;
+    flex-direction: row; 
+}
+
+/* Distribucion del mapa*/
+
+#map {
+    height: 100vh;
+    width: 90%; /* Tamaño del map en horizontal*/
+    position: relative;
+    overflow: hidden; 
+}
+
+
+/* Control de el panel lateral derecho */
+
+
+#panelInferior {
+    height: 100vh;
+    width: 370px;
+    background: #ffffff;
+    position: relative;
+    
+    overflow-y: auto;   /* scroll vertical */
+    overflow-x: hidden; /* vuelve a ocultar horizontal */
+    
+
+    border-left: 1px solid #cccccc;
+
+    display: block;
+}
+
+
+
+#panelInferiorScroll {
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+
+#panelInferior > * {
+    margin: 0;
+}
+/* PANEL DE CONSULTA */
+
+.panel-botones {
+    position: relative;
+    top: 10px;
+    left: 10px;
+    width: 100%;
+    background: #fdfdfd; 
+    border: 1px solid #6f8186;
+    border-radius: 6px;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
+    overflow: hidden;
+    z-index: 1100;
+}
+
+/* Panel de consulta */
+
+.panel-botones-header {
+    background: #2e1f33;
+    color: rgb(255, 255, 255);
+    padding: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: move;
+}
+
+.panel-botones-body {
+    padding: 10px;
+}
+
+.panel-botones button,
+.panel-botones select {
+    margin-top: 8px;
+    margin-right: 8px;
+    padding: 8px 12px;
+}
+
+/* Panel Flotante */
+
+.panel-info {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: auto;
+    background: #ffffff;
+    border: 1px solid #7a6c6c;
+    border-radius: 6px;
+    box-shadow: 0px 2px 8px rgba(254, 254, 254, 0.2);
+    overflow: hidden;
+    z-index: 1000;
+}
+
+
+/* Panel de tabla de atributos */
+
+.panel-header {
+    background: #2e1f33;
+    color: white;
+    padding: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: move;
+}
+
+.panel-body {
+    padding: 8px;
+    height: auto;
+    overflow: visible; 
+}
+
+.resize-handle {
+    height: 12px;
+    background: #fdfdfd;
+    cursor: ns-resize;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+/* Estilo de tabla tipo Excel */
+
+#tablaContenido table {
+    width: 100%;
+    min-width: 100%;
+    table-layout: auto;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+#tablaContenido th,
+#tablaContenido td {
+    border: 1px solid #000000;
+    padding: 6px;
+    text-align: left;
+
+    white-space: normal;      /* permite salto de línea */
+    word-break: break-word;   /* evita desbordes */
+}
+
+#tablaContenido th {
+    background: #48c8e4;
+}
+
+/* ICONO + */
+.acordeon-header::before {
+
+content: "+";
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 15px;
+    color: #555;
+}
+
+
+/* CUANDO ESTÁ ABIERTO */
+.acordeon-item.active .acordeon-header:before {
+    content: "-";
+}
+
+/* ESPACIADO TEXTO */
+
+.acordeon-header {
+    position: relative;
+    background: transparent;   /*blanco limpio */
+    color: #333;
+    padding: 6px;  /* compacto tipo Leaflet */
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    border-radius: 4px;  
+}
+
+
+.acordeon-body {
+    display: none;
+    padding: 6px 8px 6px 22px;
+    background: #ffffff;
+    border-bottom: 1px solid #eee;
+    border-top: none;  
+    font-size: 13px;
+}
+
+
+.acordeon {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
+
+
+.panel-botones-body button {
+    background: #ffffff;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.panel-botones-body button:hover {
+    background: #f0f0f0;
+}
+
+.leaflet-control-layers{
+    border: none;
+    background: transparent;
+    margin: 0;
+    padding: 0;
+}
+
+.leaflet-control-layers-list {
+    padding: 0 !important;
+    overflow: visible !important;   
+    max-height: none !important;    
+}
+
+.leaflet-control-layers label {
+    font-weight: normal;
+    color: #333;
+}
+
+.leaflet-control-layers-list {
+    display: block;
+}
+
+/*tabla debajo de el mapa*/
+
+#map {
+    position: relative;
+}
+
+
+#tablaAtributos {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+
+    width: calc(100% - 370px);
+    height: 250px;
+
+    background: #fff;
+    border-top: 2px solid #2e1f33;
+
+    z-index: 9999;
+
+    display: none;
+    flex-direction: column;   /* importante */
+    overflow: hidden;         /* evita desbordes raros */
+}
+
+
+/* Scroll horizontal y vertical */
+
+#tablaContenido thead th {
+    position: sticky;
+    top: 0;
+    background: #48c8e4;
+    z-index: 2;
+}
+
+
+#tablaContenido {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: auto;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+
+/* ===== FILA DE CAPA CON MENU ===== */
+
+.fila-capa {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    
+}
+
+.nombre-capa {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.menu-capa {
+    cursor: pointer;
+    font-weight: bold;
+    padding: 2px 6px;
+    user-select: none;
+}
+
+.menu-capa:hover {
+    background-color: #e6e6e6;
+    border-radius: 4px;
+}
+
+/* ================================
+   FORZAR ANCHO COMPLETO DE FILAS
+   ================================ */
+
+/* Cada fila (label) del control */
+.leaflet-control-layers label {
+    display: block;
+    width: 100%;
+}
+
+/* Input (checkbox) con ancho estable */
+.leaflet-control-layers label input {
+    margin-right: 6px;
+}
+
+/* Nuestra fila personalizada */
+.fila-capa {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* Nombre + símbolo */
+.nombre-capa {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Tres puntos fijos al lado derecho del panel */
+.menu-capa {
+    position: absolute;
+    right: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 2px 6px;
+    flex-shrink: 0;
+}
+/* Hover profesional */
+.menu-capa:hover {
+    background-color: #e6e6e6;
+    border-radius: 4px;
+}
+
+
+#menuContextualCapa .menu-item {
+    padding: 8px 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+#menuContextualCapa .menu-item:hover {
+    background: #e0e0e0;
+}
+
+/* ===== PANEL CONTEXTUAL DE CAPA ===== */
+
+#menuContextualCapa {
+    position: absolute;
+    right: 100%;
+    top: 0;              /* Ajustable */
+   
+    width: 200px;
+    background: #f4f4f4;
+    border: 1px solid #bcbcbc;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    padding: 6px 0;
+    font-size: 13px;
+    display: none;
+    z-index: 3000;
+}
+
+#menuContextualCapa .menu-item {
+    padding: 10px 14px;
+    cursor: pointer;
+}
+
+#menuContextualCapa .menu-item:hover {
+    background: #e0e0e0;
+}
+
+/* ===============================
+   BOTÓN CERRAR (X) – CORRECTO
+   =============================== */
+
+#menuContextualCapa .cerrar-menu {
+    width: auto !important;          /*  no ocupa toda la fila */
+    justify-content: flex-end;       /*  a la derecha */
+    padding: 6px 10px;               /* compacto */
+    cursor: pointer;
+    margin-left: auto;               /*  empuja a la derecha */
+}
+
+/* Quitar el fondo SOLO para la X */
+#menuContextualCapa .cerrar-menu:hover {
+    background: transparent !important;
+    color: #c40000;                  /* feedback sutil */
+}
+
+/* =========================================================
+   ESTILO REAL PARA Leaflet.Control.Layers.Tree
+   Delimitación de contenedores temáticos
+   ========================================================= */
+
+/* Contenedor de cada carpeta (Cartografía base, Año 2010, etc.) */
+
+/* Poner miniaturas en fila — solo para mapas base */
+.leaflet-control-layers-base .leaflet-layerstree-children .leaflet-layerstree-node {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    width: auto;
+    margin: 4px;
+}
+/* Encabezado del contenedor */
+.leaflet-layerstree-node.leaflet-layerstree-folder 
+.leaflet-layerstree-header {
+    padding: 6px 10px;
+    font-weight: bold;
+    background: #eef3f9;
+    border-bottom: 1px solid #d6dde6;
+    cursor: pointer;
+}
+
+/* Hover del encabezado */
+.leaflet-layerstree-node.leaflet-layerstree-folder 
+.leaflet-layerstree-header:hover {
+    background: #e2ebf7;
+}
+
+/* Área interna donde están las capas */
+.leaflet-layerstree-children {
+    padding: 4px 6px;
+    background: #ffffff;
+}
+
+/* Quitar borde duplicado de labels */
+.leaflet-layerstree-children label {
+    border: none !important;
+}
+
+/* Separación visual entre capas internas */
+.leaflet-layerstree-children .leaflet-layerstree-node {
+    margin-bottom: 3px;
+}
+
+/* =====================================================
+   CONTENEDORES TEMÁTICOS – ESTILO LEAFLET REAL
+   ===================================================== */
+
+/* Carpetas principales (Cartografía base, Año XXXX) */
+.leaflet-control-layers .leaflet-control-layers-overlays > label {
+    display: block;
+    margin: 8px 6px;
+    padding: 8px 10px;
+    border: 1px solid #cfd6e0;
+    border-radius: 6px;
+    background: #f1f4f9;
+    font-weight: bold;
+}
+
+/* Hover institucional */
+.leaflet-control-layers .leaflet-control-layers-overlays > label:hover {
+    background: #e2ebf7;
+}
+
+/* Capas internas */
+.leaflet-control-layers .leaflet-control-layers-overlays label label {
+    margin: 2px 0;
+    padding: 4px 6px;
+    border: none;
+    background: transparent;
+    font-weight: normal;
+}
+
+/* =====================================================
+   SEPARADORES HORIZONTALES PARA CONTENEDORES DEL TREE
+   (ESTILO LEAFLET REAL)
+   ===================================================== */
+
+/* Separador entre carpetas (Cartografía base, años, etc.) */
+.leaflet-control-layers-overlays > label {
+    padding: 8px 10px;
+    border-bottom: 1px solid #d6dde6;   /* ← LÍNEA VISIBLE */
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+/* Último contenedor sin línea extra */
+.leaflet-control-layers-overlays > label:last-child {
+    border-bottom: none;
+}
+
+/* Capas internas sin separador */
+.leaflet-control-layers-overlays label label {
+    border-bottom: none;
+    padding-left: 18px;
+}
+
+/* =========================================
+   GRUPOS DE CAPAS – MISMO ESTILO BASE MAPS
+   ========================================= */
+
+.layer-group-header {
+    font-weight: bold;
+    padding: 8px 10px;
+    border-bottom: 1px solid #d6dde6;
+    background: #ffffff;
+}
+
+/* Hover igual a Leaflet */
+.layer-group-header:hover {
+    background: #f0f4f8;
+}
+
+/* =====================================
+   BUSCADOR DE CAPAS FIJO
+   ===================================== */
+
+.buscador-capas-fijo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    margin: 6px 8px;
+    background: #f8f9fb;
+    border: 1px solid #d6dde6;
+    border-radius: 6px;
+}
+
+.buscador-capas-fijo input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 13px;
+    background: transparent;
+}
+
+.icono-busqueda {
+    font-size: 14px;
+    color: #666;
+}
+
+/* ==========================
+   RESALTADO DE BÚSQUEDA
+   ========================== */
+.fila-capa.resaltada {
+    background-color: #fff3cd;   /* amarillo suave */
+    border-left: 4px solid #ff9800;
+    padding-left: 4px;
+}
+
+/* ================================
+   SEPARADOR ENTRE BLOQUES PRINCIPALES
+   ================================ */
+
+.leaflet-layerstree-node {
+    border-bottom: 1px solid #bfc7d1;   /* línea gris visible */
+    margin-bottom: 4px;
+    padding-bottom: 4px;
+}
+
+/* Opcional: quitar la línea del último bloque */
+.leaflet-layerstree-node:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+/* =====================================
+   LÍNEA DE TIEMPO ESTILO GOOGLE EARTH
+   ===================================== */
+
+#timelineControl {
+    position: absolute;
+    bottom: 24px;
+    left: 16px;
+    z-index: 1000;
+    background: rgba(243, 240, 240, 0.35);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 12px;
+    padding: 10px 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 260px;
+}
+
+#timelineLabels {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 12px;
+    font-weight: bold;
+    color: #f0f0f0;
+    padding: 0 4px;
+}
+
+#timelineSlider {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: #9172b4;
+    outline: none;
+    cursor: pointer;
+}
+
+#timelineSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #2e1f33;
+    cursor: pointer;
+    box-shadow: 0 0 4px rgba(0,0,0,0.4);
+    border: 2px solid white;
+}
+
+#timelineAnioActual {
+    font-size: 13px;
+    font-weight: bold;
+    color: #2e1f33;
+    letter-spacing: 1px;
+}
+
+
+/* PASO 1: permitir posicionamiento interno */
+#map {
+    position: relative;
+}
+
+/* PASO 2: asegurar que el botón esté visible */
+#map button {
+    z-index: 9999;
+}
+
+
+
+/* =====================================
+   PANEL DE HERRAMIENTAS DE DIBUJO
+   ===================================== */
+
+#panelDibujo {
+    position: absolute;
+    top: 160px;
+    left: 50px;        /* al lado del botón */
+    z-index: 9999;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    width: 180px;
+    font-size: 13px;
+    overflow: hidden;
+}
+
+.panel-dibujo-header {
+    background: #2e1f33;
+    color: white;
+    padding: 8px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.panel-dibujo-body {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px;
+}
+
+.btn-herramienta {
+    width: 44px;
+    height: 44px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #f8f8f8;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.btn-herramienta:hover {
+    background: #e0e0f0;
+    border-color: #9172b4;
+}
+
+.btn-herramienta.activo {
+    background: #2e1f33;
+    color: white;
+    border-color: #2e1f33;
+}
+
+/* =====================================
+   BUSCADOR FIJO — SIEMPRE VISIBLE
+   ===================================== */
+
+#buscadorFijo {
+    position: relative;        /* para que las sugerencias se posicionen bien */
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    margin: 0;
+    background: #f8f9fb;
+    border-bottom: 1px solid #d6dde6;
+    z-index: 4000;             /* por encima de todo */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#buscadorFijo input {
+    border: 1px solid #d6dde6;
+    border-radius: 6px;
+    outline: none;
+    width: 100%;
+    font-size: 13px;
+    padding: 5px 8px;
+    background: white;
+    box-sizing: border-box;
+}
+
+#buscadorFijo input:focus {
+    border-color: #9172b4;
+    box-shadow: 0 0 0 2px rgba(145,114,180,0.15);
+}
+
+/* =====================================
+   LISTA DE SUGERENCIAS
+   ===================================== */
+
+#listaSugerencias {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #d6dde6;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    z-index: 5000;
+    max-height: 220px;
+    overflow-y: auto;
+    display: none;             /* oculta hasta que haya sugerencias */
+}
+
+.sugerencia-item {
+    padding: 8px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.15s;
+}
+
+.sugerencia-item:last-child {
+    border-bottom: none;
+}
+
+.sugerencia-item:hover {
+    background: #f0eaf8;       /* morado muy suave */
+}
+
+/* Texto resaltado dentro de sugerencia */
+.sugerencia-item mark {
+    background: #fff3cd;
+    color: #333;
+    font-weight: bold;
+    border-radius: 2px;
+    padding: 0 2px;
+}
+
+/* Capa resaltada en el árbol */
+.fila-capa.resaltada {
+    background-color: #fff3cd;
+    border-left: 4px solid #ff9800;
+    padding-left: 4px;
+    border-radius: 3px;
+}
+
+/* ================================================
+   BOTONES FLOTANTES — MISMO TAMAÑO QUE + y - 
+   El + y - de Leaflet miden exactamente 26x26px
+   ================================================ */
+.btn-swipe,
+.btn-timeline,
+.btn-dibujo,
+.btn-analisis,
+.btn-leyenda {
+    position: absolute;
+    left: 10px;
+    z-index: 9999;
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.btn-swipe:hover,
+.btn-timeline:hover,
+.btn-dibujo:hover,
+.btn-analisis:hover,
+.btn-leyenda:hover {
+    background: rgba(255, 255, 255, 0.85);
+}
+
+.btn-swipe    { top: 80px;  }
+.btn-timeline { top: 116px; }
+.btn-dibujo   { top: 152px; }
+.btn-analisis { top: 188px; }
+.btn-leyenda  { top: 224px; }
+/* Posición vertical de cada botón */
+/* El + está en ~10px, el - en ~36px, el resto empieza en ~80px */
+
+.btn-swipe    { top: 80px;  }
+.btn-timeline { top: 112px; }   /* 80 + 26 + 6px de separación */
+.btn-dibujo   { top: 144px; }   /* 112 + 26 + 6px de separación */
+
+/* Hover igual al de Leaflet */
+.btn-swipe:hover,
+.btn-timeline:hover,
+.btn-dibujo:hover {
+    background: #f4f4f4;
+}
+
+/* ================================================
+   PANEL SWIPE — UNIFICADO CON ESTILO DEL ÁRBOL
+   ================================================ */
+
+#panelSwipe {
+    border-bottom: 1px solid #d6dde6;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
+
+/* Encabezado igual al árbol de capas */
+.swipe-header {
+    padding: 8px 10px;
+    font-weight: bold;
+    font-size: 13px;
+    background: #eef3f9;
+    border-bottom: 1px solid #d6dde6;
+    color: #2e1f33;
+    letter-spacing: 0.2px;
+}
+
+/* Cuerpo con padding uniforme */
+.swipe-body {
+    padding: 10px 10px 12px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Etiquetas */
+.swipe-label {
+    font-size: 13px;          /* un punto más grande */
+    color: #444;
+    margin-top: 6px;
+    margin-bottom: 2px;
+    font-weight: bold;
+}
+
+/* Contenedor del select — necesario para quitar el azul */
+.swipe-select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.swipe-select-wrapper::after {
+    content: '▾';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 12px;
+    pointer-events: none;
+}
+
+/* Selectores */
+.swipe-select {
+    width: 100%;
+    padding: 5px 8px;
+    padding-right: 28px;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    border: 1px solid #d6dde6;
+    border-radius: 4px;
+    background-color: white;
+    color: #333;
+    outline: none;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.swipe-select:focus {
+    border-color: #9172b4;
+    box-shadow: 0 0 0 2px rgba(145,114,180,0.15);
+}
+
+.swipe-select:focus {
+    border-color: #9172b4;
+    box-shadow: 0 0 0 2px rgba(145,114,180,0.15);
+}
+
+/* Quitar fondo azul de opciones seleccionadas */
+.swipe-select option {
+    background-color: white !important;
+    color: #333 !important;
+    font-size: 13px;
+}
+
+.swipe-select option:checked {
+    background-color: white !important;
+    color: #2e1f33 !important;
+    font-weight: bold;
+}
+
+.swipe-select option:hover {
+    background-color: #f0eaf8 !important;
+}
+
+.swipe-select optgroup {
+    color: #888;
+    font-size: 12px;
+    font-style: normal;
+    background-color: white;
+}
+
+/* Fila de botones */
+.swipe-botones {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+/* Botones base */
+.swipe-btn {
+    flex: 1;
+    padding: 6px 0;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background 0.15s;
+}
+
+/* Botón Activar */
+.swipe-btn-activar {
+    background: #2e1f33;
+    color: white;
+    border-color: #2e1f33;
+}
+
+.swipe-btn-activar:hover {
+    background: #4a3460;
+}
+
+/* Botón Desactivar */
+.swipe-btn-desactivar {
+    background: white;
+    color: #c0392b;
+    border-color: #c0392b;
+}
+
+.swipe-btn-desactivar:hover {
+    background: #fdf0f0;
+}
+
+/* ================================================
+   BOTÓN ANÁLISIS ESTADÍSTICO
+   ================================================ */
+
+.btn-analisis {
+    position: absolute;
+    left: 10px;
+    top: 176px;            /* 144 + 26 + 6px debajo del dibujo */
+    z-index: 9999;
+    width: 26px;
+    height: 26px;
+    font-size: 14px;
+    line-height: 26px;
+    text-align: center;
+    background: white;
+    border: 2px solid rgba(0,0,0,0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background 0.15s;
+}
+
+.btn-analisis:hover {
+    background: #f4f4f4;
+}
+
+/* ================================================
+   PANEL ANÁLISIS — mismo estilo que panelSwipe
+   ================================================ */
+
+#panelAnalisis {
+    border-bottom: 1px solid #d6dde6;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
+
+/* Gráfica responsive */
+#analisisGrafica {
+    width: 100%;
+    max-height: 220px;
+}
+
+#chartAnalisis {
+    width: 100% !important;
+    max-height: 220px !important;
+}
+
+/* Reporte de texto */
+#analisisReporte h4 {
+    margin: 0 0 6px 0;
+    font-size: 13px;
+    color: #2e1f33;
+}
+
+#analisisReporte p {
+    margin: 0;
+    font-size: 12px;
+    color: #444;
+    line-height: 1.6;
+}/* =====================================
+   HEADER PANEL CAPAS
+   ===================================== */
+#panelInferior::before {
+    content: 'CAPAS Y HERRAMIENTAS';
+    display: block;
+    background: #2e1f33;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding: 10px 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* =====================================
+   TOGGLE SWITCH — directo sobre checkbox
+   ===================================== */
+.leaflet-control-layers label input[type="checkbox"] {
+    -webkit-appearance: none;
+    appearance: none;
+    min-width: 32px;
+    width: 32px;
+    height: 18px;
+    background: #ccc;
+    border-radius: 18px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+    vertical-align: middle;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.leaflet-control-layers label input[type="checkbox"]::after {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 14px;
+    height: 14px;
+    background: white;
+    border-radius: 50%;
+    transition: left 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.leaflet-control-layers label input[type="checkbox"]:checked {
+    background: #9172b4;
+}
+
+.leaflet-control-layers label input[type="checkbox"]:checked::after {
+    left: 16px;
+}
+
+/* =====================================
+   MINIATURAS MAPAS BASE
+   ===================================== */
+.miniatura-mapa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    color: #333;
+    text-align: center;
+}
+
+.miniatura-mapa img {
+    width: 60px;
+    height: 45px;
+    border-radius: 6px;
+    border: 2px solid #ccc;
+    object-fit: cover;
+    transition: border-color 0.2s;
+}
+
+.miniatura-mapa img:hover,
+.miniatura-mapa.activa img {
+    border-color: #9172b4;
+}
+
+.contenedor-miniaturas {
+    display: flex;
+    gap: 10px;
+    padding: 8px 10px;
+    flex-wrap: wrap;
+}
+
+/* =====================================
+   SECCIONES MÁS LIMPIAS
+   ===================================== */
+.leaflet-layerstree-node.leaflet-layerstree-folder
+.leaflet-layerstree-header {
+    font-size: 13px;
+    font-weight: bold;
+    color: #2e1f33;
+    background: #f5f0fa;
+    border-left: 3px solid #9172b4;
+    padding: 10px 12px !important;
+    font-family: Arial, sans-serif;
+    letter-spacing: 0.2px;
+    border-bottom: 1px solid #e8e0f0;
+    margin-bottom: 2px;
+}
+
+.layer-group-header {
+    font-size: 13px;
+    font-weight: bold;
+    color: #2e1f33;
+    background: #f5f0fa;
+    border-left: 3px solid #9172b4;
+    padding: 7px 8px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* =====================================
+   ALINEACIÓN UNIFORME DE TODAS LAS CAPAS
+   Sin indentación extra en ningún nivel
+   ===================================== */
+
+/* Quitar indentación de nodos hijos del árbol */
+.leaflet-layerstree-children {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Quitar padding interno de cada nodo */
+.leaflet-layerstree-node {
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+.leaflet-layerstree-children label {
+    padding-left: 8px !important;
+    margin-left: 0 !important;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 12px !important;
+    font-family: Arial, sans-serif !important;
+    color: #333 !important;
+    line-height: 1.5;
+}
+
+/* Forzar que fila-capa ocupe todo el ancho */
+.leaflet-layerstree-children .fila-capa {
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 6px;
+}
+
+/* Quitar indentación que agrega el tree por niveles */
+.leaflet-layerstree-node .leaflet-layerstree-node {
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+/* Alinear el toggle +/- con el resto */
+.leaflet-layerstree-header {
+    padding-left: 8px !important;
+}
+/* =====================================
+   ALINEACIÓN UNIFORME — TÍTULOS Y GRUPOS
+   ===================================== */
+
+/* Título principal "Capas geográficas", "Fotografías..." */
+.leaflet-layerstree-node > .leaflet-layerstree-header {
+    padding-left: 8px !important;
+    margin-left: 0 !important;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Encabezados de grupos (Cartografía base, Año 2010, etc.) */
+.layer-group-header {
+    padding-left: 8px !important;
+    margin-left: 0 !important;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Quitar cualquier margen del contenedor del tree */
+.leaflet-control-layers-overlays {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Todos los labels al mismo nivel */
+.leaflet-control-layers label {
+    padding-left: 8px !important;
+    margin-left: 0 !important;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Encabezado de mapas base — mismo nivel */
+.leaflet-control-layers-base {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.leaflet-control-layers-base label {
+    padding-left: 8px !important;
+    margin-left: 0 !important;
+}
+este si lo tiene 
+html, body {
+    margin: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+}
+
+#app {
+    height: 100vh;
+    display: flex;
+    flex-direction: row; 
+}
+
+/* Distribucion del mapa*/
+
+#map {
+    height: 100vh;
+    width: 90%; /* Tamaño del map en horizontal*/
+    position: relative;
+    overflow: hidden; 
+}
+
+
+/* PANEL DE CONSULTA */
+
+.panel-botones {
+    position: relative;
+    top: 10px;
+    left: 10px;
+    width: 100%;
+    background: #fdfdfd; 
+    border: 1px solid #6f8186;
+    border-radius: 6px;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
+    overflow: hidden;
+    z-index: 1100;
+}
+
+/* Panel de consulta */
+
+.panel-botones-header {
+    background: #2e1f33;
+    color: rgb(255, 255, 255);
+    padding: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: move;
+}
+
+.panel-botones-body {
+    padding: 10px;
+}
+
+.panel-botones button,
+.panel-botones select {
+    margin-top: 8px;
+    margin-right: 8px;
+    padding: 8px 12px;
+}
+
+/* Panel Flotante */
+
+.panel-info {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: auto;
+    background: #ffffff;
+    border: 1px solid #7a6c6c;
+    border-radius: 6px;
+    box-shadow: 0px 2px 8px rgba(254, 254, 254, 0.2);
+    overflow: hidden;
+    z-index: 1000;
+}
+
+
+/* Panel de tabla de atributos */
+
+.panel-header {
+    background: #2e1f33;
+    color: white;
+    padding: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: move;
+}
+
+.resize-handle {
+    height: 12px;
+    background: #fdfdfd;
+    cursor: ns-resize;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+/* Estilo de tabla tipo Excel */
+
+#tablaContenido table {
+    width: 100%;
+    min-width: 100%;
+    table-layout: auto;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+#tablaContenido th,
+#tablaContenido td {
+    border: 1px solid #000000;
+    padding: 6px;
+    text-align: left;
+
+    white-space: normal;      /* 🔥 permite salto de línea */
+    word-break: break-word;   /* 🔥 evita desbordes */
+}
+
+#tablaContenido th {
+    background: #48c8e4;
+}
+
+/* ICONO + */
+.acordeon-header::before {
+
+content: "+";
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 15px;
+    color: #555;
+}
+
+
+/* CUANDO ESTÁ ABIERTO */
+.acordeon-item.active .acordeon-header:before {
+    content: "-";
+}
+
+/* ESPACIADO TEXTO */
+
+.acordeon-header {
+    position: relative;
+    background: transparent;   /*blanco limpio */
+    color: #333;
+    padding: 6px;  /* compacto tipo Leaflet */
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    border-radius: 4px;  
+}
+
+
+.acordeon-body {
+    display: none;
+    padding: 6px 8px 6px 22px;
+    background: #ffffff;
+    border-bottom: 1px solid #eee;
+    border-top: none;  
+    font-size: 13px;
+}
+
+
+.acordeon {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
+
+
+.panel-botones-body button {
+    background: #ffffff;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.panel-botones-body button:hover {
+    background: #f0f0f0;
+}
+
+.leaflet-control-layers{
+    border: none;
+    background: transparent;
+    margin: 0;
+    padding: 0;
+}
+
+.leaflet-control-layers-list {
+    padding: 0 !important;
+}
+
+.leaflet-control-layers label {
+    font-weight: normal;
+    color: #333;
+}
+
+.leaflet-control-layers-list {
+    display: block;
+}
+
+/*tabla debajo de el mapa*/
+
+#map {
+    position: relative;
+}
+
+#tablaAtributos {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 250px;
+    
+    
+    display: flex;
+    flex-direction: column;    
+
+    background: #fff;
+    border-top: 2px solid #2e1f33;
+    z-index: 999;
+
+    overflow: hidden;
+}
+
+/* Scroll horizontal y vertical */
+
+#tablaContenido thead th {
+    position: sticky;
+    top: 0;
+    background: #48c8e4;
+    z-index: 2;
+}
+
+
+#tablaContenido {
+    height: auto;       
+    overflow-x: visible;
+}
+
+
+/* ===== FILA DE CAPA CON MENU ===== */
+
+.fila-capa {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.nombre-capa {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.menu-capa {
+    cursor: pointer;
+    font-weight: bold;
+    padding: 2px 6px;
+    user-select: none;
+}
+
+.menu-capa:hover {
+    background-color: #e6e6e6;
+    border-radius: 4px;
+}
+
+/* ================================
+   FORZAR ANCHO COMPLETO DE FILAS
+   ================================ */
+
+/* Cada fila (label) del control */
+.leaflet-control-layers label {
+    display: block;
+    width: 100%;
+}
+
+/* Input (checkbox) con ancho estable */
+.leaflet-control-layers label input {
+    margin-right: 6px;
+}
+
+/* Nuestra fila personalizada */
+.fila-capa {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* Nombre + símbolo */
+.nombre-capa {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Empuja los tres puntos completamente a la derecha */
+.menu-capa {
+    margin-left: auto;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 2px 6px;
+}
+
+/* Hover profesional */
+.menu-capa:hover {
+    background-color: #e6e6e6;
+    border-radius: 4px;
+}
+
+
+#menuContextualCapa .menu-item {
+    padding: 8px 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+#menuContextualCapa .menu-item:hover {
+    background: #e0e0e0;
+}
+
+/* ===== PANEL CONTEXTUAL DE CAPA ===== */
+
+#menuContextualCapa {
+    position: absolute;
+    right: 100%;
+    top: 120px;              /* Ajustable */
+   
+    width: 200px;
+    background: #f4f4f4;
+    border: 1px solid #bcbcbc;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    padding: 6px 0;
+    font-size: 13px;
+    display: none;
+    z-index: 3000;
+}
+
+#menuContextualCapa .menu-item {
+    padding: 10px 14px;
+    cursor: pointer;
+}
+
+#menuContextualCapa .menu-item:hover {
+    background: #e0e0e0;
+}
+
+/* ===============================
+   BOTÓN CERRAR (X) – CORRECTO
+   =============================== */
+
+#menuContextualCapa .cerrar-menu {
+    width: auto !important;          /*  no ocupa toda la fila */
+    justify-content: flex-end;       /*  a la derecha */
+    padding: 6px 10px;               /* compacto */
+    cursor: pointer;
+    margin-left: auto;               /*  empuja a la derecha */
+}
+
+/* Quitar el fondo SOLO para la X */
+#menuContextualCapa .cerrar-menu:hover {
+    background: transparent !important;
+    color: #c40000;                  /* feedback sutil */
+}
+
+/* =========================================================
+   ESTILO REAL PARA Leaflet.Control.Layers.Tree
+   Delimitación de contenedores temáticos
+   ========================================================= */
+
+/* Contenedor de cada carpeta (Cartografía base, Año 2010, etc.) */
+
+/* Poner miniaturas en fila */
+.leaflet-layerstree-children .leaflet-layerstree-node {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+}
+/* Encabezado del contenedor */
+.leaflet-layerstree-node.leaflet-layerstree-folder 
+.leaflet-layerstree-header {
+    padding: 6px 10px;
+    font-weight: bold;
+    background: #eef3f9;
+    border-bottom: 1px solid #d6dde6;
+    cursor: pointer;
+}
+
+/* Hover del encabezado */
+.leaflet-layerstree-node.leaflet-layerstree-folder 
+.leaflet-layerstree-header:hover {
+    background: #e2ebf7;
+}
+
+/* Área interna donde están las capas */
+.leaflet-layerstree-children {
+    padding: 4px 6px;
+    background: #ffffff;
+}
+
+/* Quitar borde duplicado de labels */
+.leaflet-layerstree-children label {
+    border: none !important;
+}
+
+/* Separación visual entre capas internas */
+.leaflet-layerstree-children .leaflet-layerstree-node {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* =====================================================
+   CONTENEDORES TEMÁTICOS – ESTILO LEAFLET REAL
+   ===================================================== */
+
+/* Carpetas principales (Cartografía base, Año XXXX) */
+.leaflet-control-layers .leaflet-control-layers-overlays > label {
+    display: block;
+    margin: 8px 6px;
+    padding: 8px 10px;
+    border: 1px solid #cfd6e0;
+    border-radius: 6px;
+    background: #f1f4f9;
+    font-weight: bold;
+}
+
+/* Hover institucional */
+.leaflet-control-layers .leaflet-control-layers-overlays > label:hover {
+    background: #e2ebf7;
+}
+
+/* Capas internas */
+.leaflet-control-layers .leaflet-control-layers-overlays label label {
+    margin: 2px 0;
+    padding: 4px 6px;
+    border: none;
+    background: transparent;
+    font-weight: normal;
+}
+
+/* =====================================================
+   SEPARADORES HORIZONTALES PARA CONTENEDORES DEL TREE
+   (ESTILO LEAFLET REAL)
+   ===================================================== */
+
+/* Separador entre carpetas (Cartografía base, años, etc.) */
+.leaflet-control-layers-overlays > label {
+    padding: 8px 10px;
+    border-bottom: 1px solid #d6dde6;   /* ← LÍNEA VISIBLE */
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+/* Último contenedor sin línea extra */
+.leaflet-control-layers-overlays > label:last-child {
+    border-bottom: none;
+}
+
+/* Capas internas sin separador */
+.leaflet-control-layers-overlays label label {
+    border-bottom: none;
+    padding-left: 18px;
+}
+
+/* =========================================
+   GRUPOS DE CAPAS – MISMO ESTILO BASE MAPS
+   ========================================= */
+
+.layer-group-header {
+    font-weight: bold;
+    padding: 8px 10px;
+    border-bottom: 1px solid #d6dde6;
+    background: #ffffff;
+}
+
+/* Hover igual a Leaflet */
+.layer-group-header:hover {
+    background: #f0f4f8;
+}
+
+/* =====================================
+   BUSCADOR DE CAPAS FIJO
+   ===================================== */
+
+.buscador-capas-fijo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    margin: 6px 8px;
+    background: #f8f9fb;
+    border: 1px solid #d6dde6;
+    border-radius: 6px;
+}
+
+.buscador-capas-fijo input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 13px;
+    background: transparent;
+}
+
+.icono-busqueda {
+    font-size: 14px;
+    color: #666;
+}
+
+/* ==========================
+   RESALTADO DE BÚSQUEDA
+   ========================== */
+.fila-capa.resaltada {
+    background-color: #fff3cd;   /* amarillo suave */
+    border-left: 4px solid #ff9800;
+    padding-left: 4px;
+}
+
+/* ================================
+   SEPARADOR ENTRE BLOQUES PRINCIPALES
+   ================================ */
+
+.leaflet-layerstree-node {
+    border-bottom: 1px solid #bfc7d1;   /* línea gris visible */
+    margin-bottom: 4px;
+    padding-bottom: 4px;
+}
+
+/* Opcional: quitar la línea del último bloque */
+.leaflet-layerstree-node:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+/* =====================================
+   LÍNEA DE TIEMPO ESTILO GOOGLE EARTH
+   ===================================== */
+
+#timelineControl {
+    position: absolute;
+    bottom: 24px;
+    left: 16px;
+    z-index: 1000;
+    background: rgba(243, 240, 240, 0.35);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 12px;
+    padding: 10px 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 260px;
+}
+
+#timelineLabels {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 12px;
+    font-weight: bold;
+    color: #f0f0f0;
+    padding: 0 4px;
+}
+
+#timelineSlider {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: #9172b4;
+    outline: none;
+    cursor: pointer;
+}
+
+#timelineSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #2e1f33;
+    cursor: pointer;
+    box-shadow: 0 0 4px rgba(0,0,0,0.4);
+    border: 2px solid white;
+}
+
+#timelineAnioActual {
+    font-size: 13px;
+    font-weight: bold;
+    color: #2e1f33;
+    letter-spacing: 1px;
+}
+
+
+/* PASO 1: permitir posicionamiento interno */
+#map {
+    position: relative;
+}
+
+/* PASO 2: asegurar que el botón esté visible */
+#map button {
+    z-index: 9999;
+}
+
+
+
+/* =====================================
+   PANEL DE HERRAMIENTAS DE DIBUJO
+   ===================================== */
+
+#panelDibujo {
+    position: absolute;
+    top: 160px;
+    left: 50px;        /* al lado del botón */
+    z-index: 9999;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    width: 180px;
+    font-size: 13px;
+    overflow: hidden;
+}
+
+.panel-dibujo-header {
+    background: #2e1f33;
+    color: white;
+    padding: 8px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.panel-dibujo-body {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px;
+}
+
+.btn-herramienta {
+    width: 44px;
+    height: 44px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #f8f8f8;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.btn-herramienta:hover {
+    background: #e0e0f0;
+    border-color: #9172b4;
+}
+
+.btn-herramienta.activo {
+    background: #2e1f33;
+    color: white;
+    border-color: #2e1f33;
+}
+
+/* =====================================
+   BUSCADOR FIJO — SIEMPRE VISIBLE
+   ===================================== */
+
+#buscadorFijo {
+    position: relative;        /* para que las sugerencias se posicionen bien */
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    margin: 0;
+    background: #f8f9fb;
+    border-bottom: 1px solid #d6dde6;
+    z-index: 4000;             /* por encima de todo */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#buscadorFijo input {
+    border: 1px solid #d6dde6;
+    border-radius: 6px;
+    outline: none;
+    width: 100%;
+    font-size: 13px;
+    padding: 5px 8px;
+    background: white;
+    box-sizing: border-box;
+}
+
+#buscadorFijo input:focus {
+    border-color: #9172b4;
+    box-shadow: 0 0 0 2px rgba(145,114,180,0.15);
+}
+
+/* =====================================
+   LISTA DE SUGERENCIAS
+   ===================================== */
+
+#listaSugerencias {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #d6dde6;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    z-index: 5000;
+    max-height: 220px;
+    overflow-y: auto;
+    display: none;             /* oculta hasta que haya sugerencias */
+}
+
+.sugerencia-item {
+    padding: 8px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.15s;
+}
+
+.sugerencia-item:last-child {
+    border-bottom: none;
+}
+
+.sugerencia-item:hover {
+    background: #f0eaf8;       /* morado muy suave */
+}
+
+/* Texto resaltado dentro de sugerencia */
+.sugerencia-item mark {
+    background: #fff3cd;
+    color: #333;
+    font-weight: bold;
+    border-radius: 2px;
+    padding: 0 2px;
+}
+
+/* Capa resaltada en el árbol */
+.fila-capa.resaltada {
+    background-color: #fff3cd;
+    border-left: 4px solid #ff9800;
+    padding-left: 4px;
+    border-radius: 3px;
+}
+
+/* ================================================
+   BOTONES FLOTANTES — MISMO TAMAÑO QUE + y - 
+   El + y - de Leaflet miden exactamente 26x26px
+   ================================================ */
+
+
+
+/* ================================================
+   PANEL SWIPE — UNIFICADO CON ESTILO DEL ÁRBOL
+   ================================================ */
+
+#panelSwipe {
+    border-bottom: 1px solid #d6dde6;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
+
+/* Encabezado igual al árbol de capas */
+.swipe-header {
+    padding: 8px 10px;
+    font-weight: bold;
+    font-size: 13px;
+    background: #eef3f9;
+    border-bottom: 1px solid #d6dde6;
+    color: #2e1f33;
+    letter-spacing: 0.2px;
+}
+
+/* Cuerpo con padding uniforme */
+.swipe-body {
+    padding: 10px 10px 12px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Etiquetas */
+.swipe-label {
+    font-size: 13px;          /* un punto más grande */
+    color: #444;
+    margin-top: 6px;
+    margin-bottom: 2px;
+    font-weight: bold;
+}
+
+/* Contenedor del select — necesario para quitar el azul */
+.swipe-select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.swipe-select-wrapper::after {
+    content: '▾';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 12px;
+    pointer-events: none;
+}
+
+/* Selectores */
+.swipe-select {
+    width: 100%;
+    padding: 5px 8px;
+    padding-right: 28px;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    border: 1px solid #d6dde6;
+    border-radius: 4px;
+    background-color: white;
+    color: #333;
+    outline: none;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.swipe-select:focus {
+    border-color: #9172b4;
+    box-shadow: 0 0 0 2px rgba(145,114,180,0.15);
+}
+
+.swipe-select:focus {
+    border-color: #9172b4;
+    box-shadow: 0 0 0 2px rgba(145,114,180,0.15);
+}
+
+/* Quitar fondo azul de opciones seleccionadas */
+.swipe-select option {
+    background-color: white !important;
+    color: #333 !important;
+    font-size: 13px;
+}
+
+.swipe-select option:checked {
+    background-color: white !important;
+    color: #2e1f33 !important;
+    font-weight: bold;
+}
+
+.swipe-select option:hover {
+    background-color: #f0eaf8 !important;
+}
+
+.swipe-select optgroup {
+    color: #888;
+    font-size: 12px;
+    font-style: normal;
+    background-color: white;
+}
+
+/* Fila de botones */
+.swipe-botones {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+/* Botones base */
+.swipe-btn {
+    flex: 1;
+    padding: 6px 0;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background 0.15s;
+}
+
+/* Botón Activar */
+.swipe-btn-activar {
+    background: #2e1f33;
+    color: white;
+    border-color: #2e1f33;
+}
+
+.swipe-btn-activar:hover {
+    background: #4a3460;
+}
+
+/* Botón Desactivar */
+.swipe-btn-desactivar {
+    background: white;
+    color: #c0392b;
+    border-color: #c0392b;
+}
+
+.swipe-btn-desactivar:hover {
+    background: #fdf0f0;
+}
+
+/* ================================================
+   BOTÓN ANÁLISIS ESTADÍSTICO
+   ================================================ */
+
+.btn-analisis {
+    position: absolute;
+    left: 10px;
+    top: 176px;            /* 144 + 26 + 6px debajo del dibujo */
+    z-index: 9999;
+    width: 26px;
+    height: 26px;
+    font-size: 14px;
+    line-height: 26px;
+    text-align: center;
+    background: white;
+    border: 2px solid rgba(0,0,0,0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background 0.15s;
+}
+
+.btn-analisis:hover {
+    background: #f4f4f4;
+}
+
+/* ================================================
+   PANEL ANÁLISIS — mismo estilo que panelSwipe
+   ================================================ */
+
+#panelAnalisis {
+    border-bottom: 1px solid #d6dde6;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
+
+/* Gráfica responsive */
+#analisisGrafica {
+    width: 100%;
+    max-height: 220px;
+}
+
+#chartAnalisis {
+    width: 100% !important;
+    max-height: 220px !important;
+}
+
+/* Reporte de texto */
+#analisisReporte h4 {
+    margin: 0 0 6px 0;
+    font-size: 13px;
+    color: #2e1f33;
+}
+
+#analisisReporte p {
+    margin: 0;
+    font-size: 12px;
+    color: #444;
+    line-height: 1.6;
+}/* =====================================
+   HEADER PANEL CAPAS
+   ===================================== */
+#panelInferior::before {
+    content: 'CAPAS Y HERRAMIENTAS';
+    display: block;
+    background: #2e1f33;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding: 10px 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* =====================================
+   TOGGLE SWITCH — directo sobre checkbox
+   ===================================== */
+.leaflet-control-layers label input[type="checkbox"] {
+    -webkit-appearance: none;
+    appearance: none;
+    min-width: 32px;
+    width: 32px;
+    height: 18px;
+    background: #ccc;
+    border-radius: 18px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+    vertical-align: middle;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.leaflet-control-layers label input[type="checkbox"]::after {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 14px;
+    height: 14px;
+    background: white;
+    border-radius: 50%;
+    transition: left 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.leaflet-control-layers label input[type="checkbox"]:checked {
+    background: #9172b4;
+}
+
+.leaflet-control-layers label input[type="checkbox"]:checked::after {
+    left: 16px;
+}
+
+/* =====================================
+   MINIATURAS MAPAS BASE
+   ===================================== */
+.miniatura-mapa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    color: #333;
+    text-align: center;
+}
+
+.miniatura-mapa img {
+    width: 60px;
+    height: 45px;
+    border-radius: 6px;
+    border: 2px solid #ccc;
+    object-fit: cover;
+    transition: border-color 0.2s;
+}
+
+.miniatura-mapa img:hover,
+.miniatura-mapa.activa img {
+    border-color: #9172b4;
+}
+
+.contenedor-miniaturas {
+    display: flex;
+    gap: 10px;
+    padding: 8px 10px;
+    flex-wrap: wrap;
+}
+
+/* =====================================
+   SECCIONES MÁS LIMPIAS
+   ===================================== */
+.leaflet-layerstree-node.leaflet-layerstree-folder
+.leaflet-layerstree-header {
+    font-size: 13px;
+    color: #2e1f33;
+    background: #f5f0fa;
+    border-left: 3px solid #9172b4;
+}
+
+.layer-group-header {
+    font-size: 12px;
+    color: #555;
+    background: #fafafa;
+    border-left: 3px solid #d6dde6;
+    padding-left: 8px;
+}
+
+/* =====================================
+   ALINEACIÓN UNIFORME DE TODAS LAS CAPAS
+   Sin indentación extra en ningún nivel
+   ===================================== */
+
+/* Quitar indentación de nodos hijos del árbol */
+.leaflet-layerstree-children {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Quitar padding interno de cada nodo */
+.leaflet-layerstree-node {
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+.leaflet-layerstree-children label {
+    padding-left: 8px !important;
+    margin-left: 0 !important;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 12px !important;
+    font-family: Arial, sans-serif !important;
+    color: #333 !important;
+    line-height: 1.5;
+}
+/* Forzar que fila-capa ocupe todo el ancho */
+.leaflet-layerstree-children .fila-capa {
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 6px;
+}
+
+/* Quitar indentación que agrega el tree por niveles */
+.leaflet-layerstree-node .leaflet-layerstree-node {
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+/* Alinear el toggle +/- con el resto */
+.leaflet-layerstree-header {
+    padding-left: 8px !important;
+}
+/* =====================================
+   ALINEACIÓN UNIFORME — TÍTULOS Y GRUPOS
+   ===================================== */
+
+/* Título principal "Capas geográficas", "Fotografías..." */
+.leaflet-layerstree-node > .leaflet-layerstree-header {
+    padding-left: 8px !important;
+    margin-left: 0 !important;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Encabezados de grupos (Cartografía base, Año 2010, etc.) */
+.layer-group-header {
+    padding-left: 8px !important;
+    margin-left: 0 !important;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Quitar cualquier margen del contenedor del tree */
+.leaflet-control-layers-overlays {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Todos los labels al mismo nivel */
+.leaflet-control-layers label {
+    padding-left: 8px !important;
+    margin-left: 0 !important;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Encabezado de mapas base — mismo nivel */
+.leaflet-control-layers-base {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.leaflet-control-layers-base label {
+    padding-left: 8px !important;
+    margin-left: 0 !important;
+}
+
+/* =====================================
+   ESTILO FINAL — TABLA DE ATRIBUTOS
+   Basado en el estilo del análisis estadístico
+   Pegar al FINAL del archivo CSS
+   ===================================== */
+
+#tablaAtributos {
+    background: #ffffff;
+    border-top: 2px solid #2e1f33;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+}
+
+/* Contenedor con scroll */
+#tablaContenido {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: auto;
+    padding: 10px 12px 12px 12px;
+    box-sizing: border-box;
+    background: #ffffff;
+
+    /* Scroll más limpio */
+    scrollbar-width: thin;
+    scrollbar-color: #9172b4 #ece8f2;
+}
+
+/* Scroll para Chrome / Edge */
+#tablaContenido::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+#tablaContenido::-webkit-scrollbar-track {
+    background: #ece8f2;
+    border-radius: 8px;
+}
+
+#tablaContenido::-webkit-scrollbar-thumb {
+    background: #9172b4;
+    border-radius: 8px;
+    border: 2px solid #ece8f2;
+}
+
+#tablaContenido::-webkit-scrollbar-thumb:hover {
+    background: #6f5a8b;
+}
+
+/* Título de la tabla */
+#tablaContenido h3 {
+    margin: 0 0 10px 0;
+    font-size: 13px;
+    font-weight: bold;
+    color: #2e1f33;
+    letter-spacing: 0.2px;
+}
+
+/* Tabla completa */
+#tablaContenido table {
+    width: 100%;
+    min-width: max-content;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 12px;
+    color: #333;
+    background: #ffffff;
+    border: 1px solid #d6dde6;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+/* Encabezado */
+#tablaContenido thead th {
+    position: sticky;
+    top: 0;
+    background: #2e1f33;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 12px;
+    padding: 8px 10px;
+    border-right: 1px solid #4a3460;
+    border-bottom: 1px solid #4a3460;
+    z-index: 3;
+    text-align: left;
+    white-space: normal;
+    word-break: break-word;
+}
+
+#tablaContenido thead th:last-child {
+    border-right: none;
+}
+
+/* Celdas */
+#tablaContenido tbody td {
+    padding: 7px 10px;
+    border-right: 1px solid #d6dde6;
+    border-bottom: 1px solid #d6dde6;
+    background: #ffffff;
+    font-size: 12px;
+    vertical-align: top;
+    white-space: normal;
+    word-break: break-word;
+}
+
+/* Filas alternas suaves */
+#tablaContenido tbody tr:nth-child(odd) td {
+    background: #f7f7fb;
+}
+
+/* Hover sutil */
+#tablaContenido tbody tr:hover td {
+    background: #f0eaf8;
+}
+
+/* Últimos bordes limpios */
+#tablaContenido tbody td:last-child {
+    border-right: none;
+}
+
+#tablaContenido tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* =====================================
+   DASHBOARD GENERAL — ESTILO PROFESIONAL
+   Inspirado en el análisis estadístico
+   Pegar al FINAL del archivo CSS
+   ===================================== */
+
+#dashboardContenido {
+    padding: 10px 12px 14px 12px;
+    box-sizing: border-box;
+    background: #ffffff;
+    font-family: Arial, sans-serif;
+}
+
+#dashboardContenido .dashboard-general-titulo {
+    margin: 0 0 12px 0;
+    font-size: 13px;
+    font-weight: bold;
+    color: #2e1f33;
+    letter-spacing: 0.2px;
+}
+
+/* Tabla principal del dashboard */
+.dashboard-tabla-wrap {
+    margin-bottom: 14px;
+}
+
+.dashboard-tabla-general {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+    border: 1px solid #d6dde6;
+}
+
+.dashboard-tabla-general thead tr {
+    background: #2e1f33;
+    color: #ffffff;
+}
+
+.dashboard-tabla-general th {
+    padding: 7px 8px;
+    font-size: 11px;
+    text-align: left;
+}
+
+.dashboard-tabla-general td {
+    padding: 7px 8px;
+    border: 1px solid #e0e0e0;
+    color: #333;
+    font-size: 12px;
+    vertical-align: top;
+}
+
+.dashboard-tabla-general tbody tr:nth-child(odd) td {
+    background: #f7f7fb;
+}
+
+.dashboard-tabla-general tbody tr:hover td {
+    background: #f0eaf8;
+}
+
+.dashboard-tabla-general .dashboard-fila-destacada td {
+    background: #fff8e1 !important;
+    font-weight: bold;
+    color: #2e1f33;
+}
+
+/* Reporte inferior */
+.dashboard-reporte-general {
+    margin-top: 14px;
+    padding: 12px;
+    background: #f8f9fb;
+    border: 1px solid #d6dde6;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    line-height: 1.8;
+    color: #333;
+}
+
+.dashboard-reporte-general h4 {
+    margin: 0 0 10px 0;
+    font-size: 13px;
+    color: #2e1f33;
+}
+
+.dashboard-reporte-general p {
+    margin: 0 0 8px 0;
+}
+
+/* Línea destacada tipo análisis */
+.dashboard-indicador-resumen {
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    background: #f5f5f5;
+    border: 1px solid #d6dde6;
+    border-left: 4px solid #2e7d32;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #2e7d32;
+}
+
+/* =====================================
+   LIMPIEZA FINAL ÁRBOL DE CAPAS
+   ===================================== */
+
+/* Nombre de cada capa — tamaño uniforme */
+.nombre-capa {
+    font-size: 12px !important;
+    font-family: Arial, sans-serif !important;
+    color: #333 !important;
+    line-height: 1.4;
+    align-items: center;
+}
+
+/* Fila completa de capa — altura consistente */
+.fila-capa {
+    min-height: 28px;
+    padding: 2px 0;
+}
+
+/* Alinear toggle + símbolo + nombre en una sola línea */
+.leaflet-layerstree-children label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px;
+    padding: 4px 8px !important;
+    min-height: 30px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.leaflet-layerstree-children label:last-child {
+    border-bottom: none;
+}
+
+/* Títulos de sección (Capas geográficas, Fotografías...) */
+.leaflet-layerstree-node > .leaflet-layerstree-header b,
+.leaflet-layerstree-node > .leaflet-layerstree-header {
+    font-size: 13px !important;
+    font-family: Arial, sans-serif !important;
+    color: #2e1f33 !important;
+    font-weight: bold !important;
+}
+
+/* =====================================
+   BOTÓN LEYENDA
+   ===================================== */
+.btn-leyenda {
+    position: absolute;
+    left: 10px;
+    top: 208px;
+    z-index: 9999;
+    width: 26px;
+    height: 26px;
+    font-size: 14px;
+    background: white;
+    border: 2px solid rgba(0,0,0,0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background 0.15s;
+}
+.btn-leyenda:hover { background: #f4f4f4; }
+
+/* =====================================
+   PANEL LEYENDA FLOTANTE
+   ===================================== */
+#panelLeyenda {
+    position: absolute;
+    top: 80px;
+    left: 50px;
+    z-index: 9998;
+    min-width: 210px;
+    max-width: 270px;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.45);
+    border-radius: 10px;
+    box-shadow: 0 4px 24px rgba(46,31,51,0.18);
+    overflow: hidden;
+    display: none;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+
+#panelLeyendaHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(46, 31, 51, 0.82);
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    cursor: move;
+    user-select: none;
+}
+
+#btnCerrarLeyenda {
+    cursor: pointer;
+    font-size: 12px;
+    opacity: 0.8;
+    transition: opacity 0.15s;
+}
+#btnCerrarLeyenda:hover { opacity: 1; }
+
+#panelLeyendaBody {
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(145,114,180,0.5) transparent;
+}
+
+/* Grupo dentro de la leyenda */
+.leyenda-grupo {
+    margin-top: 8px;
+    margin-bottom: 2px;
+}
+
+.leyenda-grupo-titulo {
+    font-size: 11px;
+    font-weight: bold;
+    color: rgba(46,31,51,0.9);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 4px 0 3px 0;
+    border-bottom: 1px solid rgba(46,31,51,0.15);
+    margin-bottom: 4px;
+}
+
+/* Fila de cada ítem */
+.leyenda-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 0;
+    font-size: 12px;
+    color: #2e1f33;
+}
+
+/* Símbolos */
+.leyenda-simbolo-poligono {
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    border: 1.5px solid rgba(0,0,0,0.25);
+}
+
+.leyenda-simbolo-linea {
+    width: 20px;
+    height: 3px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.leyenda-simbolo-punto {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1.5px solid white;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.2);
+}
+
+/* Leyenda NDBI — 4 chips de color */
+.leyenda-ndbi {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: 100%;
+}
+
+.leyenda-ndbi-fila {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    color: #333;
+}
+
+.leyenda-ndbi-chip {
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+/* Texto vacío cuando no hay capas activas */
+.leyenda-vacia {
+    font-size: 12px;
+    color: rgba(46,31,51,0.5);
+    text-align: center;
+    padding: 8px 0;
+    font-style: italic;
+}
+/* =====================================
+   PANEL LATERAL — GRUPOS COLAPSADOS
+   ===================================== */
+
+/* Cada bloque principal (Tipo de Mapa, Capas, Fotografías) */
+.leaflet-layerstree-node > .leaflet-layerstree-header {
+    display: flex;
+    align-items: center;
+    padding: 11px 12px !important;
+    background: #ffffff;
+    border-bottom: 1px solid #ece8f2;
+    transition: background 0.15s;
+    cursor: pointer;
+}
+
+.leaflet-layerstree-node > .leaflet-layerstree-header:hover {
+    background: #f5f0fa;
+}
+
+/* Toggle +/- más compacto y alineado */
+.leaflet-layerstree-toggle {
+    font-size: 14px !important;
+    font-weight: bold;
+    color: #9172b4 !important;
+    margin-right: 8px;
+    min-width: 14px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* Texto del título del grupo */
+.leaflet-layerstree-node > .leaflet-layerstree-header b {
+    font-size: 13px !important;
+    font-family: Arial, sans-serif !important;
+    color: #2e1f33 !important;
+    letter-spacing: 0.2px;
+}
+
+/* Separador entre bloques principales */
+.leaflet-layerstree-node {
+    border-bottom: 1px solid #ece8f2 !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.leaflet-layerstree-node:last-child {
+    border-bottom: none !important;
+}
+
+/* Checkbox "seleccionar todo" más limpio */
+.leaflet-layerstree-node > .leaflet-layerstree-header input[type="checkbox"] {
+    margin-right: 6px;
+    accent-color: #9172b4;
+}
+
+/* =====================================
+   GRUPOS INTERNOS — FONDO ANCHO COMPLETO
+   ===================================== */
+
+.layer-group-header {
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    background: #f5f0fa !important;
+    border-left: 3px solid #9172b4 !important;
+    border-bottom: 1px solid #d6dde6 !important;
+    padding: 7px 10px !important;
+    margin: 0 !important;
+}
+
+/* Quitar padding/margin que corta el ancho */
+.leaflet-layerstree-children {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.leaflet-layerstree-node {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Color de los + y líneas separadoras */
+.leaflet-layerstree-toggle {
+    color: #9172b4 !important;
+    font-weight: bold !important;
+}
+/* =====================================
+   BOTONES FLOTANTES — ESTILO FINAL
+   ===================================== */
+.btn-swipe,
+.btn-timeline,
+.btn-dibujo,
+.btn-analisis,
+.btn-leyenda {
+    position: absolute !important;
+    left: 10px !important;
+    z-index: 9999 !important;
+    width: 30px !important;
+    height: 30px !important;
+    background: rgba(255, 255, 255, 0.55) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1) !important;
+    transition: background 0.2s !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+}
+
+.btn-swipe:hover,
+.btn-timeline:hover,
+.btn-dibujo:hover,
+.btn-analisis:hover,
+.btn-leyenda:hover {
+    background: rgba(255, 255, 255, 0.9) !important;
+}
+
+.btn-swipe    { top: 80px  !important; }
+.btn-timeline { top: 116px !important; }
+.btn-dibujo   { top: 152px !important; }
+.btn-analisis { top: 188px !important; }
+.btn-leyenda  { top: 224px !important; }
+/* Botones + y - de Leaflet */
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+    background: rgba(255, 255, 255, 0.55) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    border-radius: 6px !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1) !important;
+    color: #2e1f33 !important;
+    transition: background 0.2s !important;
+}
+
+.leaflet-control-zoom-in:hover,
+.leaflet-control-zoom-out:hover {
+    background: rgba(255, 255, 255, 0.9) !important;
+}
+
+.leaflet-control-zoom {
+    border: none !important;
+    box-shadow: none !important;
+}.leaflet-control-zoom-in {
+    margin-bottom: 4px !important;
+}
+
+/* =====================================
+   TOUR INTRODUCTORIO
+   ===================================== */
+
+/* Fondo oscuro detrás del tour */
+#tourOverlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 99990;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Tarjeta principal del tour */
+#tourCard {
+    position: fixed;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(46,31,51,0.35);
+    padding: 24px 28px 20px 28px;
+    max-width: 320px;
+    width: 90%;
+    z-index: 99999;
+    font-family: Arial, sans-serif;
+    animation: tourFadeIn 0.3s ease;
+}
+
+@keyframes tourFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Barra de progreso */
+#tourProgreso {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 16px;
+}
+
+.tour-dot {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: #e0e0e0;
+    transition: background 0.3s;
+}
+
+.tour-dot.activo {
+    background: #9172b4;
+}
+
+/* Ícono grande */
+#tourIcono {
+    font-size: 36px;
+    margin-bottom: 10px;
+    display: block;
+    text-align: center;
+}
+
+/* Título del paso */
+#tourTitulo {
+    font-size: 15px;
+    font-weight: bold;
+    color: #2e1f33;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+/* Descripción */
+#tourDescripcion {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.7;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Botones de navegación */
+#tourBotones {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+#tourBtnAnterior {
+    flex: 1;
+    padding: 8px 0;
+    border: 1px solid #d6dde6;
+    border-radius: 6px;
+    background: white;
+    color: #555;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+#tourBtnAnterior:hover { background: #f5f0fa; }
+
+#tourBtnSiguiente {
+    flex: 2;
+    padding: 8px 0;
+    border: none;
+    border-radius: 6px;
+    background: #2e1f33;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+#tourBtnSiguiente:hover { background: #4a3460; }
+
+/* Botón saltar */
+#tourBtnSaltar {
+    display: block;
+    text-align: center;
+    margin-top: 12px;
+    font-size: 11px;
+    color: #aaa;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#tourBtnSaltar:hover { color: #888; }
+
+/* Resaltado del elemento señalado */
+.tour-resaltado {
+    position: relative;
+    z-index: 99995 !important;
+    box-shadow: 0 0 0 4px #9172b4,
+                0 0 0 8px rgba(145,114,180,0.3) !important;
+    border-radius: 6px;
+    transition: box-shadow 0.3s;
+}
