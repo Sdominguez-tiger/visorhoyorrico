@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro Poblado Hoyorrico</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+
+<!-- Conecta el codigo de CSS  -->
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-draw/dist/leaflet.draw.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-measure/dist/leaflet-measure.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.control.layers.tree/L.Control.Layers.Tree.css" />
+    <!-- Chart.js para gráficas -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Turf.js para análisis espacial -->
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+</head>
+
+<!--Contenido del panel flotante-->
+
+<body>
+
+
+
+    <!-- contenido general de todo el Geovisor -->
+
+    <div id="app">
+
+        <!-- Renderización del mapa  -->
+
+        <div id="map">
+            <!-- LÍNEA DE TIEMPO — inicia OCULTA, se abre con el botón ⏱ -->
+<div id="timelineControl" style="display:none;">
+    <div id="timelineLabels">
+        <span>2010</span>
+        <span>2018</span>
+        <span>2025</span>
+    </div>
+    <input type="range" id="timelineSlider" min="0" max="2" step="1" value="0">
+</div>
+
+<!-- BOTÓN PARA ACTIVAR SWIPE -->
+
+<button onclick="togglePanelSwipe()" class="btn-swipe">
+    ⇄
+</button>
+
+<!-- BOTÓN PARA ACTIVAR LÍNEA DE TIEMPO -->
+<button onclick="togglePanelTimeline()" class="btn-timeline" title="Línea de tiempo">
+    ⏱
+</button>
+
+<!-- BOTÓN PARA ACTIVAR HERRAMIENTAS DE DIBUJO -->
+<button onclick="togglePanelDibujo()" class="btn-dibujo" title="Herramientas de dibujo">
+    ✎
+</button>
+
+<!-- BOTÓN PARA ANÁLISIS ESTADÍSTICO -->
+<button onclick="togglePanelAnalisis()" class="btn-analisis" title="Análisis estadístico">
+    ▁▃▅
+</button>
+
+<!-- BOTÓN LEYENDA -->
+<button onclick="toggleLeyenda()" class="btn-leyenda" title="Leyenda">
+    🗺
+</button>
+
+<!-- PANEL LEYENDA FLOTANTE -->
+<div id="panelLeyenda">
+    <div id="panelLeyendaHeader">
+        <span>Leyenda</span>
+        <span id="btnCerrarLeyenda" onclick="toggleLeyenda()">✖</span>
+    </div>
+    <div id="panelLeyendaBody"></div>
+</div>
+</button>
+
+<!-- PANEL DE HERRAMIENTAS DE DIBUJO -->
+<div id="panelDibujo" style="display:none;">
+    <div class="panel-dibujo-header">
+        <span>Herramientas</span>
+        <span onclick="togglePanelDibujo()" style="cursor:pointer;">✖</span>
+    </div>
+    <div class="panel-dibujo-body">
+        <button class="btn-herramienta" onclick="activarHerramienta('circulo')"    title="Círculo">⬤</button>
+        <button class="btn-herramienta" onclick="activarHerramienta('poligono')"   title="Polígono">⬡</button>
+        <button class="btn-herramienta" onclick="activarHerramienta('linea')"      title="Línea">╱</button>
+        <button class="btn-herramienta" onclick="activarHerramienta('punto')"      title="Punto">●</button>
+        <button class="btn-herramienta" onclick="activarHerramienta('medirLinea')" title="Medir línea">📏</button>
+        <button class="btn-herramienta" onclick="activarHerramienta('medirArea')"  title="Medir área">▦</button>
+        <button class="btn-herramienta" onclick="limpiarDibujos()"                 title="Borrar todo">🗑️</button>
+    </div>
+</div>
+                  
+        <!-- TABLA DENTRO DEL MAPA -->
+        <div id="tablaAtributos" class="panel-info" style="display:none;">
+        <div class="panel-header">Tabla de atributos</div>
+        <div class="panel-body" id="tablaContenido"></div>    
+    </div>
+
+</div>   
+
+        
+        <!-- Contenido de la barra (Panel de control, Dashboard y Tabla) -->
+
+        <div id="panelInferior">
+    
+    
+    <div id="menuContextualCapa">
+
+     <!-- ENCABEZADO DEL PANEL -->
+     <div style="
+        display: flex;
+        justify-content: flex-end;
+        padding: 6px 10px;
+        cursor: pointer;
+        font-weight: bold;
+    "onclick="cerrarMenuContextualCapa()">
+        ✖
+    </div>
+
+
+    <!-- OPCIONES DEL MENÚ -->
+
+     <div class="menu-item" onclick="accionTabla()"> Tabla de atributos</div>
+     <div class="menu-item" onclick="accionDashboard()"> Dashboard</div>
+    </div>        
+
+    <div id="dashboard" style="display:none; padding:10px;">
+     
+     <div id="dashboardContenido"></div>
+    </div>
+
+    
+<div id="panelSwipe" style="display:none;">
+
+    <!-- ENCABEZADO — mismo estilo que árbol de capas -->
+    <div class="swipe-header">
+        ⇄ Comparar capas
+    </div>
+
+    <div class="swipe-body">
+
+        <!-- Selector izquierdo -->
+        <label class="swipe-label">Capa izquierda</label>
+        <div class="swipe-select-wrapper">
+            <select id="selectLeftLayer" class="swipe-select">
+                <option value="">Seleccionar...</option>
+            </select>
+        </div>
+
+        <label class="swipe-label">Capa derecha</label>
+        <div class="swipe-select-wrapper">
+            <select id="selectRightLayer" class="swipe-select">
+                <option value="">Seleccionar...</option>
+            </select>
+        </div>
+
+        <!-- Botones -->
+        <div class="swipe-botones">
+            <button class="swipe-btn swipe-btn-activar" onclick="iniciarComparacion()">
+                ▶ Activar
+            </button>
+            <button class="swipe-btn swipe-btn-desactivar" onclick="desactivarSwipe()">
+                ✖ Desactivar
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<!-- PANEL ANÁLISIS ESTADÍSTICO -->
+<div id="panelAnalisis" style="display:none;">
+
+    <div class="swipe-header">
+        📊 Análisis estadístico
+    </div>
+
+    <div class="swipe-body">
+
+        <label class="swipe-label">Capa principal</label>
+        <div class="swipe-select-wrapper">
+            <select id="selectAnalisisIzq" class="swipe-select">
+                <option value="">Seleccionar capa...</option>
+            </select>
+        </div>
+
+        <label class="swipe-label">Capa de referencia</label>
+        <div class="swipe-select-wrapper">
+            <select id="selectAnalisisDer" class="swipe-select">
+                <option value="">Seleccionar capa...</option>
+            </select>
+        </div>
+
+        <div class="swipe-botones">
+            <button class="swipe-btn swipe-btn-activar" onclick="ejecutarAnalisis()">
+                📊 Analizar
+            </button>
+            <button class="swipe-btn swipe-btn-desactivar" onclick="limpiarAnalisis()">
+                ✖ Limpiar
+            </button>
+        </div>
+
+        <!-- Resultado gráfica -->
+        <div id="analisisResultado" style="display:none;">
+
+            <div id="analisisGrafica" style="margin-top:12px;">
+                <canvas id="chartAnalisis"></canvas>
+            </div>
+
+            <div id="analisisReporte" style="
+                margin-top: 12px;
+                padding: 10px;
+                background: #f8f9fb;
+                border: 1px solid #d6dde6;
+                border-radius: 6px;
+                font-size: 12px;
+                line-height: 1.6;
+                color: #333;
+            "></div>
+
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+    <!-- TABLA (SE MANTIENE OCULTA Y FUERA DEL ACORDEÓN) --> 
+    <div id="tablaAtributosMapa" class="panel-info" style="display:none;">
+    <div class="panel-header">Tabla de atributos</div>
+    <div class="panel-body" id="tablaContenido"></div>    
+
+    </div>
+
+</div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
+    <script src="https://unpkg.com/leaflet-draw/dist/leaflet.draw.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-measure/dist/leaflet-measure.js"></script>
+    <script src="https://unpkg.com/leaflet.control.layers.tree/L.Control.Layers.Tree.js"></script>
+    <link rel="stylesheet"
+    href="https://unpkg.com/leaflet-swipe-mode/dist/leaflet.swipemode.css"/>
+    <script src="https://unpkg.com/leaflet-swipe-mode/dist/leaflet.swipemode.min.js"></script>
+    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+<script src="scripts.js"></script>
+
+<!-- ===== TOUR INTRODUCTORIO ===== -->
+<div id="tourOverlay" style="display:none;">
+</div>
+
+<div id="tourCard" style="display:none;">
+
+    <!-- Barra de progreso -->
+    <div id="tourProgreso">
+        <div class="tour-dot activo"></div>
+        <div class="tour-dot"></div>
+        <div class="tour-dot"></div>
+        <div class="tour-dot"></div>
+        <div class="tour-dot"></div>
+        <div class="tour-dot"></div>
+        <div class="tour-dot"></div>
+        <div class="tour-dot"></div>
+        <div class="tour-dot"></div>
+    </div>
+
+    <!-- Contenido dinámico -->
+    <span id="tourIcono">🗺️</span>
+    <div id="tourTitulo">Bienvenido</div>
+    <div id="tourDescripcion">Cargando...</div>
+
+    <!-- Botones de navegación -->
+    <div id="tourBotones">
+        <button id="tourBtnAnterior" onclick="tourAnterior()">← Atrás</button>
+        <button id="tourBtnSiguiente" onclick="tourSiguiente()">Siguiente →</button>
+    </div>
+
+    <span id="tourBtnSaltar" onclick="cerrarTour()">Saltar introducción</span>
+
+</div>
+
+</body>
+</html>
